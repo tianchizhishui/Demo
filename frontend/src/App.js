@@ -1,51 +1,34 @@
-import React, { useState } from "react";
-import "./App.css"; // Import the styles
+import React from "react";
 
-function App() {
-  const [a, setA] = useState("");
-  const [b, setB] = useState("");
-  const [result, setResult] = useState(null);
-
-  const handleCalculation = async (operation) => {
-    if (a === "" || b === "") {
-      alert("Please enter both numbers!");
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        `http://localhost:8080/${operation}?a=${a}&b=${b}`
-      );
-      const data = await res.json();
-      setResult(data);
-    } catch (error) {
-      console.error("Error fetching result:", error);
-    }
-  };
+const App = () => {
+  const buttons = [
+    "7", "8", "9", "/",
+    "4", "5", "6", "*",
+    "1", "2", "3", "-",
+    "0", "C", "=", "+"
+  ];
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>React Calculator</h1>
-      <input
-        type="number"
-        value={a}
-        onChange={(e) => setA(e.target.value)}
-        placeholder="Enter first number"
-      />
-      <input
-        type="number"
-        value={b}
-        onChange={(e) => setB(e.target.value)}
-        placeholder="Enter second number"
-      />
-      <br /><br />
-      <button onClick={() => handleCalculation("add")}>Add</button>
-      <button onClick={() => handleCalculation("subtract")}>Subtract</button>
-      <button onClick={() => handleCalculation("multiply")}>Multiply</button>
-      <button onClick={() => handleCalculation("divide")}>Divide</button>
-      <h2>Result: {result !== null ? result : "No result yet"}</h2>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+        <input
+          type="text"
+          className="w-full p-2 mb-4 text-right text-xl border rounded"
+          readOnly
+        />
+        <div className="grid grid-cols-4 gap-2">
+          {buttons.map((btn) => (
+            <button
+              key={btn}
+              className="p-4 text-lg font-semibold bg-gray-200 rounded hover:bg-gray-300 active:bg-gray-400"
+            >
+              {btn}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
