@@ -1,0 +1,14 @@
+# Node.js dependencies (Frontend)
+Frontend/node_modules/
+Frontend/.next/
+Frontend/.cache/
+Frontend/dist/
+
+# Java/Spring Boot dependencies (Backend)
+Backend/target/
+Backend/.gradle/
+Backend/.idea/
+
+# Environment files
+.env
+.env.local
