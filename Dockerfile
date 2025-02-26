@@ -10,7 +10,10 @@ RUN npm run build
 FROM openjdk:17-jdk
 WORKDIR /app
 COPY backend/target/*.jar app.jar
-COPY --from=frontend-build /app/build backend/src/main/resources/static
+COPY --from=frontend-build /app/build/ /app/src/main/resources/static/
 
-# Step 3: Set up Spring Boot to serve the frontend
-CMD ["java", "-jar", "app.jar"]
+#COPY --from=frontend-build /app/build backend/src/main/resources/static
+
+# Step 3: Expose port and run the application
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
