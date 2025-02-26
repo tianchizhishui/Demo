@@ -1,36 +1,36 @@
 package com.example.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
+import org.springframework.web.bind.annotation.*; // For @RestController, @RequestMapping, etc.
+import org.springframework.http.ResponseEntity; // For HTTP responses
+import org.springframework.http.HttpStatus; // To return proper HTTP status codes
 
 @RestController
 @CrossOrigin(
         origins = "http://localhost:3000"
 )
 public class CalculatorController {
-
-    @GetMapping("/add")
-    public int add(@RequestParam int a, @RequestParam int b) {
-        return a + b;
-    }
-
-    @GetMapping("/subtract")
-    public int subtract(@RequestParam int a, @RequestParam int b) {
-        return a - b;
-    }
-
-    @GetMapping("/multiply")
-    public int multiply(@RequestParam int a, @RequestParam int b) {
-        return a * b;
-    }
-
-    @GetMapping("/divide")
-    public double divide(@RequestParam int a, @RequestParam int b) {
-        if (b == 0) {
-            throw new ArithmeticException("Division by zero is not allowed.");
+    @PostMapping("/calculate")
+    public ResponseEntity<Double> calculate(@RequestBody CalculationRequest request) {
+        try {
+            double result = performCalculation(request);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        return (double) a / b;
+    }
+
+    private double performCalculation(CalculationRequest request) {
+        double num1 = request.getNum1();
+        double num2 = request.getNum2();
+        String operator = request.getOperator();
+
+        switch (operator) {
+            case "+": return num1 + num2;
+            case "-": return num1 - num2;
+            case "*": return num1 * num2;
+            case "/": return (num2 != 0) ? num1 / num2 : 0; // Avoid division by zero
+            default: throw new IllegalArgumentException("Invalid operator");
+        }
     }
 }
